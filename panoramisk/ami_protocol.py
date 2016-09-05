@@ -5,6 +5,7 @@ import time
 from .message import Message
 from .utils import asyncio
 from . import actions
+from . import errors
 from . import utils
 
 
@@ -12,7 +13,7 @@ class AMIProtocol(asyncio.Protocol):
 
     def connection_made(self, transport):
         self.transport = transport
-        self.closed = False
+        self.closing = False
         self.queue = utils.Queue()
         self.responses = {}
         self.factory = None
@@ -20,12 +21,8 @@ class AMIProtocol(asyncio.Protocol):
 
     def send(self, data, as_list=False):
         encoding = getattr(self, 'encoding', 'ascii')
-        if not isinstance(data, actions.Action):
-            if 'Command' in data:
-                klass = actions.Command
-            else:
-                klass = actions.Action
-            data = klass(data, as_list=as_list)
+        if self.closing:
+            raise errors.DisconnectedError(data)
         self.transport.write(str(data).encode(encoding))
         self.responses[data.id] = data
         if data.action_id:
@@ -70,19 +67,21 @@ class AMIProtocol(asyncio.Protocol):
                 if response.action_id:
                     self.responses.pop(response.action_id, None)
         elif 'Event' in message:
+            if message['Event'] == 'Shutdown':
+                self.connection_lost(message)
             self.factory.dispatch(message)
 
     def connection_lost(self, exc):  # pragma: no cover
-        if not self.closed:
+        if not self.closing:
             self.close()
-            # wait a few before reconnect
-            time.sleep(2)
-            # reconnect
-            self.factory.connect()
+            self.factory.connection_lost(exc)
 
     def close(self):  # pragma: no cover
-        if not self.closed:
-            try:
-                self.transport.close()
-            finally:
-                self.closed = True
+        if not self.closing:
+            self.closing = True
+            for idx in self.responses:
+                if not self.responses[idx].future.done():
+                    self.responses[idx].future.set_exception(errors.DisconnectedError(self.responses[idx]))
+            self.transport.close()
+            del self
+
