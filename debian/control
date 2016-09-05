@@ -9,24 +9,5 @@ Package: python3-panoramisk
 Architecture: all
 Depends: ${misc:Depends}, ${python3:Depends}
 Description: asyncio based library to play with asterisk
- ================================
  Panoramisk. The Asterisk's druid
- ================================
- .
- .. image:: https://travis-ci.org/gawel/panoramisk.png?branch=master&style=flat-square
-         :target: https://travis-ci.org/gawel/panoramisk
- .
- .. image:: https://img.shields.io/coveralls/gawel/panoramisk/master.svg
-         :target: https://coveralls.io/r/gawel/panoramisk?branch=master
- .
- .. image:: https://img.shields.io/pypi/v/panoramisk.svg?style=flat-square
-         :target: https://pypi.python.org/pypi/panoramisk
- .
- .. image:: https://img.shields.io/pypi/dw/panoramisk.svg?style=flat-square
-         :target: https://pypi.python.org/pypi/panoramisk
- .
- .. image:: https://img.shields.io/github/issues/gawel/panoramisk.svg?style=flat-square
-         :target: https://github.com/gawel/panoramisk/issues
- .
- .. image:: https://img.shields.io/github/license/gawel/panoramisk.svg?style=flat-square
 

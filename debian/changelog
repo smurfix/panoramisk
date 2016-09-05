@@ -1,3 +1,9 @@
+panoramisk (1.1~dev0-2) smurf; urgency=medium
+
+  * De-verbosize debian/control
+
+ -- Matthias Urlichs <matthias@urlichs.de>  Tue, 06 Sep 2016 01:25:57 +0200
+
 panoramisk (1.1~dev0-1) smurf; urgency=low
 
   * source package automatically created by stdeb 0.8.2
