@@ -110,7 +110,7 @@ class Manager(object):
         To retrieve answer in a coroutine::
 
             manager = Manager()
-            resp = yield from manager.send_action({'Action': 'Status'})
+            resp = await manager.send_action({'Action': 'Status'})
 
         With a callback::
 

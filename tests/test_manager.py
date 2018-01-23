@@ -127,9 +127,8 @@ def test_events(manager):
 
 
 def test_coroutine_events_handler(manager):
-    @asyncio.coroutine
-    def callback(manager, event):
-        yield  # to create quickly a coroutine generator, don't do that on
+    async def callback(manager, event):
+        pass   # to create quickly a coroutine generator, don't do that on
                # production code
 
     manager = manager()

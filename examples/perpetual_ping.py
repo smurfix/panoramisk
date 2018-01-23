@@ -4,17 +4,16 @@ from panoramisk import Manager
 import sys
 
 
-@asyncio.coroutine
-def ping(lp, username, secret):
+async def ping(lp, username, secret):
     manager = Manager(loop=lp,
                       host='127.0.0.1', port=5038,
                       username=username, secret=secret)
-    yield from manager.connect()
+    await manager.connect()
     while True:
-        p = yield from manager.send_action({'Action': 'ping'})
-        # p = yield from manager.send_action({'Action': 'SIPpeers'})
+        p = await manager.send_action({'Action': 'ping'})
+        # p = await manager.send_action({'Action': 'SIPpeers'})
         pprint(p)
-        yield from asyncio.sleep(1)
+        await asyncio.sleep(1)
     manager.close()
 
 loop = asyncio.get_event_loop()

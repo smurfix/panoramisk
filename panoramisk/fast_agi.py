@@ -14,8 +14,7 @@ class Request:
         self.writer = writer
         self.encoding = encoding
 
-    @asyncio.coroutine
-    def send_command(self, command):
+    async def send_command(self, command):
         """Send a command for FastAGI request:
 
         :param command: Command to launch on FastAGI request. Ex: 'EXEC StartMusicOnHolds'
@@ -25,22 +24,21 @@ class Request:
 
         ::
 
-            @asyncio.coroutine
-            def call_waiting(request):
+            async def call_waiting(request):
                 print(['AGI variables:', request.headers])
-                yield from request.send_command('ANSWER')
-                yield from request.send_command('EXEC StartMusicOnHold')
-                yield from request.send_command('EXEC Wait 10')
+                await request.send_command('ANSWER')
+                await request.send_command('EXEC StartMusicOnHold')
+                await request.send_command('EXEC Wait 10')
 
         """
         command += '\n'
         self.writer.write(command.encode(self.encoding))
-        yield from self.writer.drain()
-        response = yield from self.reader.readline()
+        await self.writer.drain()
+        response = await self.reader.readline()
         agi_result = parse_agi_result(response.decode(self.encoding)[:-1])
         # when we got AGIUsageError the following line contains some indication
         if 'error' in agi_result and agi_result['error'] == 'AGIUsageError':
-            buff_usage_error = yield from self.reader.readline()
+            buff_usage_error = await self.reader.readline()
             agi_result['msg'] = agi_result['msg'] + buff_usage_error.decode(self.encoding)
 
         return agi_result
@@ -74,8 +72,7 @@ class Application(dict):
 
         ::
 
-            @asyncio.coroutine
-            def start(request):
+            async def start(request):
                 print('Receive a FastAGI request')
                 print(['AGI variables:', request.headers])
 
@@ -87,7 +84,10 @@ class Application(dict):
         if path in self._route:
             raise ValueError('A route already exists.')
         if not asyncio.iscoroutinefunction(endpoint):
-            endpoint = asyncio.coroutine(endpoint)
+            def gen_epf(fn):
+                async def afn(*a,**k):
+                    return fn(*a,**k)
+            endpoint = gen_epf(endpoint)
         self._route[path] = endpoint
 
     def del_route(self, path):
@@ -100,8 +100,7 @@ class Application(dict):
 
         ::
 
-            @asyncio.coroutine
-            def start(request):
+            async def start(request):
                 print('Receive a FastAGI request')
                 print(['AGI variables:', request.headers])
 
@@ -114,16 +113,14 @@ class Application(dict):
             raise ValueError('This route doesn\'t exist.')
         del(self._route[path])
 
-    @asyncio.coroutine
-    def handler(self, reader, writer):
+    async def handler(self, reader, writer):
         """AsyncIO coroutine handler to launch socket listening.
 
         :Example:
 
         ::
 
-            @asyncio.coroutine
-            def start(request):
+            async def start(request):
                 print('Receive a FastAGI request')
                 print(['AGI variables:', request.headers])
 
@@ -136,7 +133,7 @@ class Application(dict):
         """
         buffer = b''
         while b'\n\n' not in buffer:
-            buffer += yield from reader.read(100)
+            buffer += await reader.read(100)
         lines = buffer[:-2].decode(self.default_encoding).split('\n')
         headers = OrderedDict()
         for line in lines:
@@ -154,7 +151,7 @@ class Application(dict):
                               reader=reader, writer=writer,
                               encoding=self.default_encoding)
             try:
-                yield from self._route[headers['agi_network_script']](request)
+                await self._route[headers['agi_network_script']](request)
             except Exception as e:
                 log.exception(e)
         else:

@@ -29,35 +29,33 @@ agi_arg_1: answered
 '''
 
 
-@asyncio.coroutine
-def call_waiting(request):
-    r = yield from request.send_command('ANSWER')
+async def call_waiting(request):
+    r = await request.send_command('ANSWER')
     assert {'message': None, 'result': 0, 'status_code': 200, 'value': None} == r
 
 
-@asyncio.coroutine
-def fake_asterisk_client(loop):
-    reader, writer = yield from asyncio.open_connection(
+async def fake_asterisk_client(loop):
+    reader, writer = await asyncio.open_connection(
         '127.0.0.1', 4575, loop=loop)
     # send headers
     writer.write(FAST_AGI_PAYLOAD)
     # read it back
-    msg_back = yield from reader.readline()
+    msg_back = await reader.readline()
     writer.write(b'200 result=0\n')
     writer.close()
     return msg_back
 
 
 @pytest.mark.asyncio
-def test_fast_agi_application(event_loop):
+async def test_fast_agi_application(event_loop):
     fa_app = Application(loop=event_loop)
     fa_app.add_route('call_waiting', call_waiting)
 
-    server = yield from asyncio.start_server(fa_app.handler, '127.0.0.1', 4575, loop=event_loop)
+    server = await asyncio.start_server(fa_app.handler, '127.0.0.1', 4575, loop=event_loop)
 
-    msg_back = yield from fake_asterisk_client(loop=event_loop)
+    msg_back = await fake_asterisk_client(loop=event_loop)
     assert b'ANSWER\n' == msg_back
 
     server.close()
-    yield from server.wait_closed()
-    yield from asyncio.sleep(1)  # Wait the end of endpoint
+    await server.wait_closed()
+    await asyncio.sleep(1)  # Wait the end of endpoint
