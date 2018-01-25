@@ -1,3 +1,9 @@
+trio-panoramisk (0.1.0-1) smurf; urgency=medium
+
+  * Rename: use Trio
+
+ -- Matthias Urlichs <matthias@urlichs.de>  Thu, 25 Jan 2018 12:36:12 +0100
+
 panoramisk (1.1~dev0-3) smurf; urgency=medium
 
   * doc update

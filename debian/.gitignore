@@ -2,4 +2,5 @@
 /*.log
 /*.debhelper
 /*.substvars
-/python3-panoramisk
+/python3-trio-panoramisk
+/debhelper-build-stamp

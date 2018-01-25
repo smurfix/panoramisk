@@ -1,11 +1,11 @@
-Source: panoramisk
+Source: trio-panoramisk
 Maintainer: Matthias Urlichs <matthias@urlichs.de>
 Section: python
 Priority: optional
 Build-Depends: python3-setuptools, python3-all, debhelper (>= 9)
 Standards-Version: 3.9.1
 
-Package: python3-panoramisk
+Package: python3-trio-panoramisk
 Architecture: all
 Depends: ${misc:Depends}, ${python3:Depends}
 Description: asyncio based library to play with asterisk

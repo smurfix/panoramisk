@@ -5,37 +5,23 @@ import sys
 from setuptools import setup
 from setuptools import find_packages
 
-version = '1.1.dev0'
+version = '0.1.0'
 
-install_requires = []
+if os.path.isdir("panoramisk") and not os.path.exists("trio_panoramisk"):
+    os.symlink("panoramisk","trio_panoramisk")
+
+install_requires = ['trio']
 test_requires = [
-    'pytest', 'coverage', 'coveralls'
+    'pytest-trio', 'coverage', 'coveralls'
 ]
-
-if sys.version_info[:2] < (3, 0):
-    install_requires.extend([
-        'trollius',
-        'futures',
-    ])
-    test_requires.extend(['mock'])
-elif sys.version_info[:2] < (3, 3):
-    install_requires.append('trollius')
-    test_requires.extend(['mock'])
-elif sys.version_info[:2] < (3, 4):
-    install_requires.append('asyncio')
-    test_requires.append('pytest-asyncio')
-else:
-    test_requires.append('pytest-asyncio')
-
 
 def read(*rnames):
     return open(os.path.join(os.path.dirname(__file__), *rnames)).read()
 
-
 setup(
-    name='panoramisk',
+    name='trio_panoramisk',
     version=version,
-    description="asyncio based library to play with asterisk",
+    description="trio-based library to play with asterisk",
     long_description=read('README.rst'),
     classifiers=[
         'Development Status :: 5 - Production/Stable',
@@ -49,10 +35,10 @@ setup(
         'Topic :: Communications :: Telephony',
         'Topic :: Software Development :: Libraries :: Python Modules',
     ],
-    keywords=['asyncio', 'asterisk', 'voip'],
-    author='Gael Pasgrimaud',
-    author_email='gael@gawel.org',
-    url='https://github.com/gawel/panoramisk/',
+    keywords=['trio', 'asterisk', 'voip'],
+    author='Matthias Urlichs',
+    author_email='matthias@urlichs.de',
+    url='https://github.com/M-o-a-T/trio-panoramisk/',
     license='MIT license',
     packages=find_packages(exclude=['docs', 'tests']),
     include_package_data=True,
@@ -62,8 +48,8 @@ setup(
     extras_require={
         'test': test_requires,
     },
-    entry_points='''
-    [console_scripts]
-    panoramisk = panoramisk.command:main
-    '''
+#    entry_points='''
+#    [console_scripts]
+#    panoramisk = panoramisk.command:main
+#    '''
 )
