@@ -1,3 +1,9 @@
+panoramisk (1.1~dev0-3) smurf; urgency=medium
+
+  * doc update
+
+ -- Matthias Urlichs <matthias@urlichs.de>  Thu, 25 Jan 2018 12:28:01 +0100
+
 panoramisk (1.1~dev0-2) smurf; urgency=medium
 
   * De-verbosize debian/control

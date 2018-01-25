@@ -9,11 +9,13 @@
 .. code-block:: python
 
     >>> from panoramisk import testing
-    >>> manager = testing.Manager(stream=stream)  # stream is a filename containing an Asterisk trace
-    >>> future = manager.send_action({'Action': 'Ping'})
-    >>> resp = future.result()
-    >>> assert 'ping' in resp
-    >>> assert resp.ping == 'Pong'
+    >>> import trio
+    >>> async def run():
+    >>>    manager = testing.Manager(stream=stream)  # stream is a filename containing an Asterisk trace
+    >>>    resp = await manager.send_action({'Action': 'Ping'})
+    >>>    assert 'ping' in resp
+    >>>    assert resp.ping == 'Pong'
+    >>> trio.run(run)
 
 .. automodule:: panoramisk.testing
 
