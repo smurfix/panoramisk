@@ -6,7 +6,7 @@ Usage: python originate.py config.ini
 """
 import sys
 import asyncio
-from panoramisk.call_manager import CallManager
+from trio_panoramisk.call_manager import CallManager
 
 
 async def originate():

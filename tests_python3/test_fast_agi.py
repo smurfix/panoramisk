@@ -1,5 +1,5 @@
 import asyncio
-from panoramisk.fast_agi import Application
+from trio_panoramisk.fast_agi import Application
 import pytest
 
 FAST_AGI_PAYLOAD = b'''agi_network: yes

@@ -1,6 +1,6 @@
 from pprint import pprint
 import asyncio
-from panoramisk import fast_agi
+from trio_panoramisk import fast_agi
 
 loop = asyncio.get_event_loop()
 

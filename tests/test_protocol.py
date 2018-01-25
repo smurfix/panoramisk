@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from panoramisk.utils import asyncio
-from panoramisk import testing
+from trio_panoramisk.utils import asyncio
+from trio_panoramisk import testing
 import pytest
 
 

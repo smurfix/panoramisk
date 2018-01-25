@@ -1,4 +1,4 @@
-trio-panoramisk (0.1.0-1) smurf; urgency=medium
+trio-panoramisk (0.1.0-2) smurf; urgency=medium
 
   * Rename: use Trio
 

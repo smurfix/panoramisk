@@ -8,7 +8,7 @@
 
 .. code-block:: python
 
-    >>> from panoramisk import testing
+    >>> from trio_panoramisk import testing
     >>> import trio
     >>> async def run():
     >>>    manager = testing.Manager(stream=stream)  # stream is a filename containing an Asterisk trace

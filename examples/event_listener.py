@@ -1,5 +1,5 @@
 import asyncio
-from panoramisk import Manager
+from trio_panoramisk import Manager
 
 manager = Manager(loop=asyncio.get_event_loop(),
                   host='ip',

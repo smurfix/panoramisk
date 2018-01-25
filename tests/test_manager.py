@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 import os
 import pytest
-from panoramisk import testing
-from panoramisk import message
-from panoramisk.utils import asyncio
+from trio_panoramisk import testing
+from trio_panoramisk import message
+from trio_panoramisk.utils import asyncio
 
 test_dir = os.path.join(os.path.dirname(__file__), 'fixtures')
 

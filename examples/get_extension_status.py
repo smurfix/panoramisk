@@ -1,6 +1,6 @@
 from pprint import pprint
 import asyncio
-from panoramisk import Manager
+from trio_panoramisk import Manager
 
 
 async def extension_status():

@@ -1,5 +1,5 @@
 import asyncio
-from panoramisk import Manager
+from trio_panoramisk import Manager
 from pprint import pprint
 
 

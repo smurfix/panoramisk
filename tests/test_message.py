@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from panoramisk.message import Message
-from panoramisk import utils
+from trio_panoramisk.message import Message
+from trio_panoramisk import utils
 import pytest
 
 
